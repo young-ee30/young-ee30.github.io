@@ -98,11 +98,6 @@
   .specs .k{color:var(--muted);}
   .specs .v{color:var(--text); text-align:right;}
 
-  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:44px;}
-  .stat{border:1px solid var(--line-dim); background:#0a0e16; padding:20px; text-align:center;}
-  .stat .num{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--amber);}
-  .stat .lbl{font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:6px;}
-
   .skill-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line-dim); border:1px solid var(--line-dim);}
   .skill-cell{background:var(--blue2); padding:20px; transition:all .18s ease;}
   .skill-cell:hover{background:rgba(59,130,246,0.14); box-shadow:inset 0 0 0 1px var(--line);}
@@ -138,7 +133,7 @@
   footer .links a:hover{border-color:var(--amber); color:var(--amber); transform:translateY(-2px);}
 
   @media(max-width:760px){
-    h1{font-size:28px; min-height:0;} .hero-top{grid-template-columns:1fr;} .radar-wrap{margin-top:30px;} .about-grid{grid-template-columns:1fr;} .skill-grid,.stat-row{grid-template-columns:1fr 1fr;} nav ul{display:none;}
+    h1{font-size:28px; min-height:0;} .hero-top{grid-template-columns:1fr;} .radar-wrap{margin-top:30px;} .about-grid{grid-template-columns:1fr;} .skill-grid{grid-template-columns:1fr 1fr;} nav ul{display:none;}
   }
 </style>
 </head>
@@ -193,13 +188,6 @@
         <div class="node">TERRAFORM</div><div class="conn"></div>
         <div class="node amber">ECS DEPLOY</div>
       </div>
-    </div>
-
-    <div class="stat-row">
-      <div class="stat"><div class="num" data-count="3">0</div><div class="lbl">SECURITY PROJECTS</div></div>
-      <div class="stat"><div class="num" data-count="4">0</div><div class="lbl">SCAN TOOLS 도입</div></div>
-      <div class="stat"><div class="num" data-count="4">0</div><div class="lbl">계층형 보안 단계</div></div>
-      <div class="stat"><div class="num" data-count="2027">0</div><div class="lbl">졸업 예정</div></div>
     </div>
   </div>
 </header>
@@ -326,16 +314,11 @@
     document.getElementById('uptime').textContent = `${h}:${m}:${s}`;
   },1000);
 
-  // scroll reveal + counters + bars
+  // scroll reveal + bars
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
         e.target.classList.add('in');
-        e.target.querySelectorAll('.num[data-count]').forEach(n=>{
-          const target=parseInt(n.dataset.count,10); let cur=0;
-          const step=Math.max(1,Math.round(target/30));
-          const iv=setInterval(()=>{ cur+=step; if(cur>=target){cur=target; clearInterval(iv);} n.textContent=cur; },30);
-        });
         e.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
         io.unobserve(e.target);
       }
