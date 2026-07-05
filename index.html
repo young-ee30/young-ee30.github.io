@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lee Ga-young | Live Network</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<style>
+  :root{
+    --blue:#000000; --blue2:#0a0a0c; --line:#3b82f6; --line-dim:rgba(59,130,246,0.22);
+    --text:#f5f7fa; --muted:#8d97ab; --amber:#ffffff;
+    --mono:'Pretendard', sans-serif; --sans:'Pretendard', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--blue); color:var(--text); font-family:var(--sans); overflow-x:hidden;
+    background-image:
+      linear-gradient(var(--line-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-dim) 1px, transparent 1px);
+    background-size:26px 26px;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 24px; position:relative;}
+
+  /* scroll reveal */
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ambient roaming glow */
+  .glow-orb{position:fixed; width:520px; height:520px; border-radius:50%; filter:blur(90px); opacity:.18; pointer-events:none; z-index:0;
+    background:radial-gradient(circle, var(--line), transparent 70%); animation:roam 22s ease-in-out infinite;}
+  .glow-orb.b{background:radial-gradient(circle, var(--amber), transparent 70%); animation-duration:28s; animation-delay:-6s;}
+  @keyframes roam{
+    0%{transform:translate(-10%,-10%);} 25%{transform:translate(60%,10%);} 50%{transform:translate(40%,60%);}
+    75%{transform:translate(-5%,40%);} 100%{transform:translate(-10%,-10%);}
+  }
+
+  nav{border-bottom:1px solid var(--line-dim); padding:18px 0; position:sticky; top:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:50;}
+  nav .wrap{display:flex; justify-content:space-between; align-items:center;}
+  .logo{font-family:var(--mono); font-size:13px; color:var(--line); letter-spacing:1px; display:flex; align-items:center; gap:8px;}
+  .pulse-dot{width:8px; height:8px; border-radius:50%; background:var(--amber); position:relative;}
+  .pulse-dot::after{content:''; position:absolute; inset:0; border-radius:50%; background:var(--amber); animation:pulse-ring 1.8s ease-out infinite;}
+  @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(255,255,255,0.5);} 100%{box-shadow:0 0 0 12px rgba(255,255,255,0);}}
+  nav ul{display:flex; gap:28px; list-style:none; font-family:var(--mono); font-size:12px; color:var(--muted);}
+  nav a{transition:color .15s ease;}
+  nav a:hover{color:var(--line);}
+
+  header.hero{padding:80px 0 60px; position:relative; z-index:1;}
+  .hero-top{display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center;}
+  .drawing-no{font-family:var(--mono); font-size:11.5px; color:var(--muted); letter-spacing:2px; display:flex; gap:24px; margin-bottom:28px; flex-wrap:wrap;}
+  .drawing-no span b{color:var(--amber);}
+  h1{font-family:var(--sans); font-size:40px; font-weight:700; line-height:1.34; min-height:110px; color:var(--text);}
+  .caret{color:#fff; font-weight:400; animation:caret-blink 0.9s steps(1) infinite; margin-left:2px;}
+  @keyframes caret-blink{50%{opacity:0;}}
+  .lead{margin-top:22px; color:var(--text); max-width:560px; font-size:16px; line-height:1.8;}
+  .cta-row{margin-top:34px; display:flex; gap:14px;}
+
+  /* radar sweep — top right of hero */
+  .radar-wrap{text-align:center;}
+  .radar{position:relative; width:240px; height:240px; margin:0 auto; border-radius:50%; border:1px solid var(--line-dim); background:
+      repeating-radial-gradient(circle, transparent 0, transparent 28px, rgba(255,255,255,0.08) 29px);}
+  .radar::before{content:''; position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(59,130,246,0.5), transparent 60deg);
+    animation:sweep 3s linear infinite;}
+  @keyframes sweep{to{transform:rotate(360deg);}}
+  .radar .blip{position:absolute; width:6px; height:6px; border-radius:50%; background:#fff; box-shadow:0 0 10px var(--line); animation:blip-pulse 2s ease-in-out infinite;}
+  @keyframes blip-pulse{0%,100%{opacity:1;} 50%{opacity:.15;}}
+  .radar-label{font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:16px; letter-spacing:2px;}
+  .btn{font-family:var(--mono); font-size:12.5px; padding:13px 24px; border:1px solid var(--line); transition:all .18s ease; display:inline-block;}
+  .btn.solid{background:var(--line); color:var(--blue); font-weight:600; border:none;}
+  .btn.solid:hover{background:var(--amber); box-shadow:0 6px 20px rgba(255,255,255,0.3); transform:translateY(-2px);}
+  .btn:not(.solid):hover{border-color:var(--amber); color:var(--amber); transform:translateY(-2px);}
+
+  .schematic{margin-top:56px; border:1px solid var(--line-dim); padding:30px; position:relative; background:#0a0e16;}
+  .schem-label{font-family:var(--mono); font-size:11px; color:var(--text); letter-spacing:2px; margin-bottom:20px;}
+  .node-row{display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+  .node{font-family:var(--mono); font-size:12px; border:1px solid var(--line); padding:9px 12px; text-align:center; min-width:90px; color:var(--line); background:#0a0e16; transition:all .18s ease; position:relative;}
+  .node:hover{border-color:var(--amber); color:var(--amber); transform:translateY(-2px);}
+  .node.amber{border-color:var(--amber); color:var(--amber); animation:node-breathe 2.4s ease-in-out infinite;}
+  @keyframes node-breathe{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.35);} 50%{box-shadow:0 0 0 6px rgba(255,255,255,0);}}
+  /* animated flowing connector — data packet in motion */
+  .conn{flex:1; height:2px; min-width:20px; position:relative; background:var(--line-dim); overflow:hidden;}
+  .conn::before{content:''; position:absolute; top:0; left:-40%; width:40%; height:100%; background:linear-gradient(90deg, transparent, var(--line), transparent); animation:packet 2.2s linear infinite;}
+  @keyframes packet{0%{left:-40%;} 100%{left:100%;}}
+
+  section{padding:76px 0; border-top:1px solid var(--line-dim); position:relative; z-index:1;}
+  .sec-label{font-family:var(--mono); font-size:11px; color:var(--amber); letter-spacing:2px; margin-bottom:12px;}
+  h2{font-family:var(--sans); font-size:28px; font-weight:600; margin-bottom:40px;}
+
+  .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:40px;}
+  .about-text{border:1px solid var(--line-dim); background:#0a0e16; padding:26px;}
+  .about-text p{color:var(--text); line-height:1.9; font-size:15.5px; margin-bottom:16px;}
+  .about-text p:last-child{margin-bottom:0;}
+  .specs{border:1px solid var(--line-dim); background:#0a0e16;}
+  .specs .row{display:flex; justify-content:space-between; padding:13px 18px; border-bottom:1px solid var(--line-dim); font-family:var(--mono); font-size:12px; transition:background .15s ease;}
+  .specs .row:hover{background:rgba(59,130,246,0.1);}
+  .specs .row:last-child{border-bottom:none;}
+  .specs .k{color:var(--muted);}
+  .specs .v{color:var(--text); text-align:right;}
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:44px;}
+  .stat{border:1px solid var(--line-dim); background:#0a0e16; padding:20px; text-align:center;}
+  .stat .num{font-family:var(--mono); font-size:26px; font-weight:700; color:var(--amber);}
+  .stat .lbl{font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:6px;}
+
+  .skill-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line-dim); border:1px solid var(--line-dim);}
+  .skill-cell{background:var(--blue2); padding:20px; transition:all .18s ease;}
+  .skill-cell:hover{background:rgba(59,130,246,0.14); box-shadow:inset 0 0 0 1px var(--line);}
+  .skill-cell h4{font-family:var(--mono); font-size:11px; color:var(--amber); letter-spacing:1px; margin-bottom:12px;}
+  .bar-track{height:5px; background:rgba(255,255,255,0.08); border-radius:3px; margin:6px 0 10px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--line),var(--amber)); width:0%; border-radius:3px; transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
+  .skill-cell .l{font-family:var(--mono); font-size:11.5px; color:var(--muted); line-height:1.6;}
+
+  .project{display:block; border:1px solid var(--line-dim); margin-bottom:24px; padding:30px; position:relative; background:#0a0e16; transition:all .2s ease; cursor:pointer;}
+  .project-more{display:inline-block; margin-top:18px; font-family:var(--mono); font-size:13.5px; font-weight:600; color:var(--line);}
+  .project:hover{border-color:var(--line); background:#0f1623; transform:translateY(-3px); box-shadow:0 14px 32px rgba(0,0,0,0.35);}
+  .project-top{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .project-top h3{font-family:var(--sans); font-size:20px; font-weight:700;}
+  .project-role{font-family:var(--mono); font-size:13px; color:var(--amber); margin-top:8px;}
+  .rev{font-family:var(--mono); font-size:11.5px; color:var(--text); border:1px solid var(--line-dim); padding:5px 10px; height:fit-content;}
+  .project p.desc{color:var(--text); font-size:15.5px; line-height:1.85; margin-top:16px; max-width:700px;}
+  .flow{margin-top:18px; display:flex; flex-wrap:wrap; gap:6px; align-items:center;}
+  .flow span:not(.arrow){font-family:var(--mono); font-size:12.5px; border:1px solid var(--line-dim); padding:6px 10px; color:var(--line); background:#0a0e16; transition:all .15s ease;}
+  .flow span:not(.arrow):hover{border-color:var(--amber); color:var(--amber);}
+  .flow .arrow{color:var(--line); animation:arrow-blink 1.4s ease-in-out infinite;}
+  @keyframes arrow-blink{0%,100%{opacity:.3;} 50%{opacity:1;}}
+  .tech-tags{margin-top:18px; display:flex; flex-wrap:wrap; gap:7px;}
+  .tech-tags span{font-family:var(--mono); font-size:12px; color:var(--line); background:#0a0e16; border:1px solid var(--line-dim); padding:5px 11px; border-radius:4px; transition:all .15s ease;}
+  .tech-tags span:hover{border-color:var(--amber); color:var(--amber);}
+  .repo-link{display:inline-block; margin-top:18px; font-family:var(--mono); font-size:13px; color:var(--line); border-bottom:1px solid var(--line); transition:color .15s ease;}
+  .repo-link:hover{color:var(--amber); border-color:var(--amber);}
+
+  footer{padding:70px 0 90px; text-align:center; position:relative; z-index:1;}
+  footer h3{font-family:var(--sans); font-size:26px; font-weight:600; margin-bottom:12px;}
+  footer p{color:var(--muted); font-family:var(--mono); font-size:12.5px; margin-bottom:26px;}
+  footer .links{display:flex; justify-content:center; gap:14px;}
+  footer .links a{font-family:var(--mono); font-size:12.5px; border:1px solid var(--line); padding:11px 24px; background:#0a0e16; transition:all .18s ease; display:inline-block;}
+  footer .links a:hover{border-color:var(--amber); color:var(--amber); transform:translateY(-2px);}
+
+  @media(max-width:760px){
+    h1{font-size:28px; min-height:0;} .hero-top{grid-template-columns:1fr;} .radar-wrap{margin-top:30px;} .about-grid{grid-template-columns:1fr;} .skill-grid,.stat-row{grid-template-columns:1fr 1fr;} nav ul{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-orb" style="top:-10%; left:-10%;"></div>
+<div class="glow-orb b" style="bottom:-10%; right:-10%;"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="pulse-dot"></span>LEE_GAYOUNG.LIVE</div>
+    <ul>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#skills">STACK</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="drawing-no">
+          <span>NODE ID <b>SEC-2026-01</b></span>
+          <span>UPTIME <b id="uptime">00:00:00</b></span>
+          <span>STATUS <b>OPEN TO ROLES</b></span>
+        </div>
+        <h1><span id="typed"></span><span class="caret">|</span></h1>
+        <p class="lead">AWS 인프라 설계부터 CI/CD 보안 자동화, 취약점 진단, 침해사고 대응까지 — 실시간으로 흐르는 트래픽처럼 구조를 설계하고 검증합니다.</p>
+        <div class="cta-row">
+          <a class="btn solid" href="#projects">PROJECTS →</a>
+          <a class="btn" href="https://github.com/young-ee30" target="_blank">GITHUB ↗</a>
+        </div>
+      </div>
+      <div class="radar-wrap">
+        <div class="radar">
+          <div class="blip" style="top:28%; left:62%;"></div>
+          <div class="blip" style="top:66%; left:33%; animation-delay:.6s;"></div>
+          <div class="blip" style="top:46%; left:47%; animation-delay:1.2s;"></div>
+        </div>
+        <div class="radar-label">SCANNING ATTACK SURFACE...</div>
+      </div>
+    </div>
+
+    <div class="schematic">
+      <div class="schem-label">FIG.1 — LIVE REQUEST / DEPLOYMENT PATH</div>
+      <div class="node-row">
+        <div class="node">DEV PUSH</div><div class="conn"></div>
+        <div class="node amber">GH ACTIONS</div><div class="conn"></div>
+        <div class="node">SCAN</div><div class="conn"></div>
+        <div class="node">TERRAFORM</div><div class="conn"></div>
+        <div class="node amber">ECS DEPLOY</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num" data-count="3">0</div><div class="lbl">SECURITY PROJECTS</div></div>
+      <div class="stat"><div class="num" data-count="4">0</div><div class="lbl">SCAN TOOLS 도입</div></div>
+      <div class="stat"><div class="num" data-count="4">0</div><div class="lbl">계층형 보안 단계</div></div>
+      <div class="stat"><div class="num" data-count="2027">0</div><div class="lbl">졸업 예정</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="sec-label">SHEET 01 / PROFILE</div>
+    <h2>About</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>국민대학교 정보보안암호수학과 전공, 소프트웨어학과 부전공. 현대오토에버 모빌리티 SW스쿨 IT보안 3기에서 AWS 인프라 설계, CI/CD 보안 자동화, KISA 기준 취약점 진단, 침해사고 대응까지 보안 엔지니어링 전 영역을 다뤘다.</p>
+        <p>배포 전 검증과 운영 후 관제를 하나의 흐름으로 잇는 구조 설계에 집중한다.</p>
+      </div>
+      <div class="specs">
+        <div class="row"><span class="k">EDUCATION</span><span class="v">국민대 정보보안암호수학과</span></div>
+        <div class="row"><span class="k">MINOR</span><span class="v">소프트웨어학과</span></div>
+        <div class="row"><span class="k">PERIOD</span><span class="v">2023.03 – 2027.06</span></div>
+        <div class="row"><span class="k">PROGRAM</span><span class="v">현대오토에버 IT보안 3기</span></div>
+        <div class="row"><span class="k">EMAIL</span><span class="v">eyoungblll30@gmail.com</span></div>
+        <div class="row"><span class="k">GITHUB</span><span class="v">young-ee30</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <div class="sec-label">SHEET 02 / COMPONENTS</div>
+    <h2>Stack</h2>
+    <div class="skill-grid">
+      <div class="skill-cell"><h4>CLOUD / IAC</h4><div class="bar-track"><div class="bar-fill" data-w="90"></div></div><div class="l">AWS · Terraform · ECS</div></div>
+      <div class="skill-cell"><h4>DEVSECOPS</h4><div class="bar-track"><div class="bar-fill" data-w="88"></div></div><div class="l">GitHub Actions · Checkov/Trivy</div></div>
+      <div class="skill-cell"><h4>AUTOMATION</h4><div class="bar-track"><div class="bar-fill" data-w="82"></div></div><div class="l">FastAPI · Ansible · MySQL</div></div>
+      <div class="skill-cell"><h4>BLUE TEAM</h4><div class="bar-track"><div class="bar-fill" data-w="75"></div></div><div class="l">pfSense · Suricata · Wazuh</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap reveal">
+    <div class="sec-label">SHEET 03 / BUILT STRUCTURES</div>
+    <h2>Projects</h2>
+
+    <a class="project" href="project-1-aws-devsecops.html">
+      <div class="project-top">
+        <div>
+          <h3>AI 기반 AWS DevSecOps Control Plane</h3>
+          <div class="project-role">PM · GitHub Actions 설계 · AI 연동 · Control Plane 풀스택</div>
+        </div>
+        <div class="rev">REV. A</div>
+      </div>
+      <p class="desc">Terraform IaC → GitHub Actions 보안 스캔 → ECS 배포 → CloudWatch/GuardDuty 관제까지를 하나의 컨트롤 플레인으로 통합. PDF 보안 가이드를 Checkov 커스텀 정책으로 자동 변환하는 정책 자동화까지 구현.</p>
+      <div class="flow"><span>PUSH</span><span class="arrow">—▸</span><span>GITLEAKS/TRIVY/CHECKOV</span><span class="arrow">—▸</span><span>TERRAFORM APPLY</span><span class="arrow">—▸</span><span>ECR/ECS</span></div>
+      <div class="tech-tags"><span>AWS</span><span>TERRAFORM</span><span>GITHUB ACTIONS</span><span>REACT/TS</span><span>GEMINI API</span></div>
+      <span class="project-more">자세히 보기 →</span>
+    </a>
+
+    <a class="project" href="project-2-security-automation.html">
+      <div class="project-top">
+        <div>
+          <h3>Rocky Linux & DB 시스템 보안 자동화</h3>
+          <div class="project-role">PM · 점검/조치 스크립트 · 대시보드 설계 · DB 구조 설계</div>
+        </div>
+        <div class="rev">REV. B</div>
+      </div>
+      <p class="desc">KISA 주요정보통신기반시설 기준에 따라 Rocky Linux·MySQL/PostgreSQL 환경의 점검·조치·이력관리를 자동화. CIDR 필터링 → JWT → RBAC → PBKDF2/Fernet의 4단계 계층 보안 구조.</p>
+      <div class="flow"><span>ASSET 등록</span><span class="arrow">—▸</span><span>ANSIBLE 점검</span><span class="arrow">—▸</span><span>선택적 조치</span><span class="arrow">—▸</span><span>재점검 검증</span></div>
+      <div class="tech-tags"><span>PYTHON</span><span>FASTAPI</span><span>ANSIBLE</span><span>MYSQL</span><span>JWT/PBKDF2/FERNET</span></div>
+      <span class="project-more">자세히 보기 →</span>
+    </a>
+
+    <a class="project" href="project-3-incident-response.html">
+      <div class="project-top">
+        <div>
+          <h3>침해사고 대응 — 공급망 공격 시나리오 & 인프라 설계</h3>
+          <div class="project-role">인프라/네트워크 설계 · IDS/SIEM 구축</div>
+        </div>
+        <div class="rev">REV. C</div>
+      </div>
+      <p class="desc">피싱 → 공급망 오염 → 백도어 → AD 정책 주입 랜섬웨어로 이어지는 공격 시나리오를 설계·재현. pfSense + Suricata IDS와 Wazuh SIEM으로 단계별 탐지 체계를 구축하고 망 분리 인프라를 설계.</p>
+      <div class="flow"><span>PHISHING</span><span class="arrow">—▸</span><span>공급망 오염</span><span class="arrow">—▸</span><span>REVERSE SHELL</span><span class="arrow">—▸</span><span>AD/GPO 랜섬웨어</span><span class="arrow">—▸</span><span>WAZUH 탐지</span></div>
+      <div class="tech-tags"><span>PFSENSE</span><span>SURICATA</span><span>WAZUH SIEM</span><span>WINDOWS AD/GPO</span><span>VMWARE</span></div>
+      <span class="project-more">자세히 보기 →</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap reveal">
+    <h3>이가영 (Lee Ga-young)</h3>
+    <p>LIVE — eyoungblll30@gmail.com</p>
+    <div class="links">
+      <a href="mailto:eyoungblll30@gmail.com">EMAIL</a>
+      <a href="https://github.com/young-ee30" target="_blank">GITHUB</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // typing effect
+  const phrases = ["인프라의 공격 표면을 실시간으로 지켜보는 보안 엔지니어", "클라우드 위협을 자동으로 탐지·대응하는 시스템을 만듭니다"];
+  const el = document.getElementById('typed');
+  let pi=0, ci=0, deleting=false;
+  function tick(){
+    const full = phrases[pi];
+    if(!deleting){
+      ci++; el.textContent = full.slice(0,ci);
+      if(ci===full.length){ deleting=true; setTimeout(tick,1600); return; }
+    } else {
+      ci--; el.textContent = full.slice(0,ci);
+      if(ci===0){ deleting=false; pi=(pi+1)%phrases.length; }
+    }
+    setTimeout(tick, deleting?28:48);
+  }
+  tick();
+
+  // fake uptime counter
+  let sec=0;
+  setInterval(()=>{
+    sec++;
+    const h=String(Math.floor(sec/3600)).padStart(2,'0');
+    const m=String(Math.floor((sec%3600)/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    document.getElementById('uptime').textContent = `${h}:${m}:${s}`;
+  },1000);
+
+  // scroll reveal + counters + bars
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        e.target.querySelectorAll('.num[data-count]').forEach(n=>{
+          const target=parseInt(n.dataset.count,10); let cur=0;
+          const step=Math.max(1,Math.round(target/30));
+          const iv=setInterval(()=>{ cur+=step; if(cur>=target){cur=target; clearInterval(iv);} n.textContent=cur; },30);
+        });
+        e.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>{ b.style.width=b.dataset.w+'%'; });
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.2});
+  document.querySelectorAll('.reveal, header .wrap').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
